@@ -1,0 +1,17 @@
+from pyspark.sql import SparkSession
+
+# Create a SparkSession
+spark = SparkSession.builder.appName("HiveJDBC").getOrCreate()
+
+# Configure JDBC connection
+jdbc_url = "jdbc:hive2://<hostname>:<port>/<database>;user=<username>;password=<password>"
+
+# Load data from Hive table
+table_name = "<hive_table_name>"
+df = spark.read.jdbc(url=jdbc_url, table=table_name)
+
+# Show data
+df.show()
+
+# Close the SparkSession
+spark.stop()
