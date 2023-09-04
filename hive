@@ -1,0 +1,19 @@
+from pyspark.sql import SparkSession
+
+# Create a SparkSession
+spark = SparkSession.builder \
+    .appName("Example") \
+    .getOrCreate()
+
+# Read the Hive partitioned table into a DataFrame
+df = spark.sql("SELECT * FROM your_hive_partitioned_table")
+
+# Specify the partitioning columns when writing the DataFrame
+df.write \
+    .partitionBy("partition_column1", "partition_column2") \ # List the partition columns
+    .saveAsTable("new_hive_partitioned_table") # Specify the name of the new Hive table
+df.write \
+    .partitionBy("partition_column1", "partition_column2") \
+    .option("path", "/your/custom/table/location") \ # Specify the custom location
+    .mode("overwrite") \  # You can use "overwrite" or "append"
+    .saveAsTable("new_hive_partitioned_table")
